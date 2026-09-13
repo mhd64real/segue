@@ -328,6 +328,9 @@ export interface Store {
   getVideo(id: string): Promise<Video | null>;
   createVideo(input: NewVideo): Promise<Video>;
   updateVideo(id: string, patch: VideoPatch): Promise<Video | null>;
+  // True while a reply for one of the video's branches is sending or sent, which blocks
+  // deleting the video.
+  hasSendingOrSentReply(videoId: string): Promise<boolean>;
   // Blocked once a reply for one of its branches is sending or sent. Otherwise its
   // writing and branched sponsorships become no_fit "Video deleted", then its branches,
   // drafts and notifications are deleted and other sponsorships lose the video link.

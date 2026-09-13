@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createManualClock } from "@/lib/clock";
-import { DEMO_VIDEOS, SEED_STEPS, seedDemoData } from "@/lib/demo/seed";
+import { DEMO_SPONSORSHIPS, DEMO_VIDEOS, SEED_STEPS, insertSegment, seedDemoData } from "@/lib/demo/seed";
 import { createMemoryStore } from "@/lib/store/memory";
-import { VIDEO_SCRIPT_MAX_LENGTH, VIDEO_TITLE_MAX_LENGTH } from "@/lib/store/types";
+import { VIDEO_DELETED_REASON, VIDEO_SCRIPT_MAX_LENGTH, VIDEO_TITLE_MAX_LENGTH } from "@/lib/store/types";
 
 const GLOBAL_KEY = Symbol.for("segue.demoStore");
 const DASHES = /[‐-―−-]/;
@@ -61,6 +61,77 @@ describe("demo seed data", () => {
     expect(oldest?.createdAt).toEqual(new Date("2026-09-01T12:00:00.000Z"));
     expect(travelTo).toHaveBeenLastCalledWith(null);
     expect(SEED_STEPS.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("seeds branches in several states, with one sent reply that blocks deleting its video", async () => {
+    const now = new Date("2026-09-13T12:00:00.000Z");
+    let travel: Date | null = null;
+    const store = createMemoryStore({ clock: { now: () => travel ?? now } });
+    await seedDemoData({
+      store,
+      now,
+      travelTo: (date) => {
+        travel = date;
+      },
+    });
+
+    const videos = await store.listVideos();
+    const byTitle = (title: string) => videos.find((video) => video.title === title)!;
+    const [wifi, castIron, hiking] = DEMO_VIDEOS.map((video) => byTitle(video.title));
+    expect([wifi.branchCount, castIron.branchCount, hiking.branchCount]).toEqual([2, 1, 0]);
+
+    const wifiBranches = await store.listBranchesForVideo(wifi.id);
+    expect(wifiBranches.map((branch) => [branch.brand, branch.status])).toEqual([
+      ["Keystone VPN", "pending"],
+      ["Meshwave", "approved"],
+    ]);
+    const sentDraft = await store.getEmailDraftByBranchId(wifiBranches[1].id);
+    expect(sentDraft).toMatchObject({ status: "sent", kind: "accept", subject: "Re: Paid integration in your WiFi video" });
+    expect(sentDraft?.sentAt?.getTime()).toBeLessThan(now.getTime());
+    expect((await store.listSponsorships()).map((sponsorship) => sponsorship.status)).toEqual([
+      "branched",
+      "branched",
+      "branched",
+    ]);
+    expect(await store.countUnreadNotifications()).toBe(2);
+
+    const branch = await store.getBranch(wifiBranches[1].id);
+    expect(branch?.baseScript).toBe(DEMO_VIDEOS[0].script);
+    expect(branch?.script).toContain("sponsored by Meshwave");
+
+    expect(await store.hasSendingOrSentReply(wifi.id)).toBe(true);
+    expect(await store.hasSendingOrSentReply(castIron.id)).toBe(false);
+    expect(await store.deleteVideo(wifi.id)).toBe("reply_sent");
+    expect(await store.deleteVideo(castIron.id)).toBe("deleted");
+    const hearth = (await store.listSponsorships()).find((sponsorship) => sponsorship.brand === "Hearth and Field");
+    expect(hearth).toMatchObject({ status: "no_fit", fitReason: VIDEO_DELETED_REASON, videoId: null });
+  });
+
+  it("uses no dash characters and only reserved example addresses in sponsorship data", () => {
+    for (const seed of DEMO_SPONSORSHIPS) {
+      const texts = [
+        seed.segment,
+        seed.segmentSummary,
+        seed.fitReason,
+        seed.decision?.replyBody ?? "",
+        ...Object.entries(seed.email)
+          .filter(([key]) => key !== "gmailMessageId" && key !== "threadId")
+          .flatMap(([, value]) => (Array.isArray(value) ? value : [String(value)])),
+      ];
+      for (const text of texts) {
+        expect(text).not.toMatch(DASHES);
+      }
+      for (const address of [seed.email.fromEmail, seed.email.replyTo, ...seed.email.cc].filter(Boolean)) {
+        expect(address).toMatch(/@[a-z]+\.example$/);
+      }
+      expect(seed.segment).toMatch(/sponsored by/i);
+    }
+  });
+
+  it("inserts a segment after a paragraph, or at the end when the paragraph is past the end", () => {
+    expect(insertSegment("A\n\nB\n\nC", 0, "S")).toBe("A\n\nS\n\nB\n\nC");
+    expect(insertSegment("A\n\nB", 1, "S")).toBe("A\n\nB\n\nS");
+    expect(insertSegment("A", 9, "S")).toBe("A\n\nS");
   });
 
   it("returns to real time even when a step fails", async () => {

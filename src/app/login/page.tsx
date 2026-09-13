@@ -41,7 +41,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
   if (demo) {
     content = (
       <>
-        <Typography color="text.secondary">Demo mode runs on sample data. Nothing is sent.</Typography>
+        <Typography sx={{ color: "text.secondary" }}>Demo mode runs on sample data. Nothing is sent.</Typography>
         <Button variant="contained" size="large" fullWidth href={DEFAULT_NEXT_PATH}>
           Continue to demo
         </Button>
@@ -65,7 +65,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
       }
       content = (
         <>
-          <Typography color="text.secondary">Sign in with the Google account for this channel.</Typography>
+          <Typography sx={{ color: "text.secondary" }}>Sign in with the Google account for this channel.</Typography>
           {error ? <Alert severity="error">{ERROR_MESSAGES[error]}</Alert> : null}
           <GoogleSignInButton next={next} />
         </>

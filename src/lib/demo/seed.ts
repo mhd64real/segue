@@ -1,4 +1,4 @@
-import type { Store } from "@/lib/store/types";
+import type { BranchDecision, NewSponsorship, Store } from "@/lib/store/types";
 
 // Sample data for demo mode. Each step writes one kind of data through the Store, so a
 // later phase adds its demo rows by appending a step to SEED_STEPS.
@@ -75,7 +75,196 @@ const seedVideos: SeedStep = async ({ store, now, travelTo }) => {
   }
 };
 
-export const SEED_STEPS: readonly SeedStep[] = [seedVideos];
+export interface DemoSponsorshipSeed {
+  videoTitle: string;
+  receivedDaysAgo: number;
+  email: Omit<NewSponsorship, "receivedAt">;
+  fitReason: string;
+  // The sponsor segment goes in after this paragraph of the video script (0 based).
+  afterParagraph: number;
+  segment: string;
+  segmentSummary: string;
+  decision?: {
+    status: BranchDecision;
+    daysAgo: number;
+    replyBody: string;
+    sentDaysAgo?: number;
+  };
+}
+
+export const DEMO_SPONSORSHIPS: readonly DemoSponsorshipSeed[] = [
+  {
+    videoTitle: DEMO_VIDEOS[0].title,
+    receivedDaysAgo: 9,
+    email: {
+      gmailMessageId: "demo-msg-meshwave",
+      threadId: "demo-thread-meshwave",
+      fromName: "Priya Raman",
+      fromEmail: "partnerships@meshwave.example",
+      replyTo: null,
+      cc: [],
+      subject: "Paid integration in your WiFi video",
+      bodyText: paragraphs(
+        "Hi,",
+        "I lead creator partnerships at Meshwave. Your videos on home networking are exactly what our customers watch before they buy. We would like a 60 second integrated read for the Meshwave Duo, our two unit mesh system, in your next networking video.",
+        "We can offer 1,800 USD for the integration and a free kit for you to test. We would need the video live by the end of the month.",
+        "Best,\nPriya Raman\nMeshwave",
+      ),
+      brand: "Meshwave",
+      product: "Meshwave Duo mesh WiFi system",
+      deliverable: "60 second integrated read",
+      compensation: "1,800 USD and a test kit",
+      deadline: "End of the month",
+      summary: "Meshwave offers 1,800 USD for a 60 second read about its two unit mesh system.",
+    },
+    fitReason: "The video already recommends a mesh system for homes with more than one floor.",
+    afterParagraph: 3,
+    segment:
+      "This part of the video is sponsored by Meshwave. The mesh kit I tested for this episode is their Meshwave Duo: two small units, one next to the router and one on the far side of the house. Setup took about ten minutes in their app, and the bedroom that used to drop video calls held a steady signal all week. If your home has more than one floor, the link for the Duo is in the description. Now, back to getting real numbers out of your network.",
+    segmentSummary: "Adds a Meshwave read after the mesh system advice, with a clear sponsorship disclosure.",
+    decision: {
+      status: "approved",
+      daysAgo: 7,
+      replyBody: paragraphs(
+        "Hi Priya,",
+        "Thank you for reaching out. I would be happy to include the Meshwave Duo in my WiFi video as a 60 second integrated read for 1,800 USD and a test kit. The segment will follow the part where I recommend mesh systems for larger homes, and it will say clearly that the video is sponsored.",
+        "Please send the kit and the agreement, and I will share the draft cut before the end of the month.",
+        "Best regards",
+      ),
+      sentDaysAgo: 6,
+    },
+  },
+  {
+    videoTitle: DEMO_VIDEOS[0].title,
+    receivedDaysAgo: 2,
+    email: {
+      gmailMessageId: "demo-msg-keystone",
+      threadId: "demo-thread-keystone",
+      fromName: "Marco Ellis",
+      fromEmail: "marco@keystonevpn.example",
+      replyTo: "creators@keystonevpn.example",
+      cc: ["scheduling@brightreach.example"],
+      subject: "Sponsorship for your home network videos",
+      bodyText: paragraphs(
+        "Hello,",
+        "Keystone VPN is looking for creators who explain home networks in plain language. We would pay 900 USD for a 45 second mention that covers how Keystone protects every device on a home WiFi network.",
+        "Our agency, Brightreach, is copied for scheduling. Replies to creators@keystonevpn.example reach the whole team.",
+        "Thanks,\nMarco Ellis",
+      ),
+      brand: "Keystone VPN",
+      product: "Keystone VPN home plan",
+      deliverable: "45 second mention",
+      compensation: "900 USD",
+      deadline: null,
+      summary: "Keystone VPN offers 900 USD for a 45 second mention about protecting home WiFi devices.",
+    },
+    fitReason: "The video covers the many devices on a home network, which is where the VPN pitch fits.",
+    afterParagraph: 4,
+    segment:
+      "Before we wrap up, a word from today's sponsor, Keystone VPN. All those phones, speakers and light bulbs we talked about send data through your home network, and Keystone encrypts that traffic for every device with one home plan. This video is sponsored by Keystone VPN, and their offer is in the description.",
+    segmentSummary: "Adds a Keystone VPN mention before the outro, tied to the devices on a home network.",
+  },
+  {
+    videoTitle: DEMO_VIDEOS[1].title,
+    receivedDaysAgo: 3,
+    email: {
+      gmailMessageId: "demo-msg-hearth",
+      threadId: "demo-thread-hearth",
+      fromName: "Dana Whitfield",
+      fromEmail: "dana@hearthandfield.example",
+      replyTo: null,
+      cc: [],
+      subject: "Seasoning oil partnership",
+      bodyText: paragraphs(
+        "Hi there,",
+        "I loved your cast iron restoration video. Hearth and Field makes a plant based seasoning oil for cast iron, and we would like to sponsor a short segment showing it during your seasoning step. Our budget is 650 USD plus product.",
+        "Warmly,\nDana Whitfield\nHearth and Field",
+      ),
+      brand: "Hearth and Field",
+      product: "Cast iron seasoning oil",
+      deliverable: "Short segment during the seasoning step",
+      compensation: "650 USD and product",
+      deadline: null,
+      summary: "Hearth and Field offers 650 USD for a short segment showing its seasoning oil.",
+    },
+    fitReason: "The script has a full seasoning step where the oil can be shown.",
+    afterParagraph: 2,
+    segment:
+      "Quick note: this video is sponsored by Hearth and Field. For the seasoning coats in this video I used their cast iron seasoning oil. It goes on thin, it does not turn sticky, and three coats gave me an even black finish. The link is in the description if you want to try it on your own pan.",
+    segmentSummary: "Adds a Hearth and Field segment right after the seasoning steps.",
+  },
+];
+
+export function insertSegment(script: string, afterParagraph: number, segment: string): string {
+  const parts = script.split("\n\n");
+  parts.splice(Math.min(afterParagraph + 1, parts.length), 0, segment);
+  return parts.join("\n\n");
+}
+
+function required<T>(value: T | null, step: string): T {
+  if (value === null) {
+    throw new Error(`Demo seed step failed: ${step}`);
+  }
+  return value;
+}
+
+// Walks each sponsorship through the same Store calls the pipeline makes, so the demo shows
+// branches in several states, including one whose reply was sent (its video cannot be deleted).
+const seedSponsorships: SeedStep = async ({ store, now, travelTo }) => {
+  const videos = await store.listVideos();
+  // Each step lands a few minutes after the email arrived, so relative times read in whole days.
+  const at = (daysAgo: number, minutes = 0) => new Date(now.getTime() - daysAgo * DAY_MS - (10 - minutes) * 60_000);
+  for (const seed of DEMO_SPONSORSHIPS) {
+    const summary = required(videos.find((video) => video.title === seed.videoTitle) ?? null, "video");
+    const video = required(await store.getVideo(summary.id), "video");
+
+    travelTo(at(seed.receivedDaysAgo, 1));
+    const { sponsorship } = await store.insertSponsorship({ ...seed.email, receivedAt: at(seed.receivedDaysAgo) });
+    required(await store.claimSponsorship(sponsorship.id, ["matching"]), "claim match");
+    const match = await store.completeMatch(sponsorship.id, { videoId: video.id, fitReason: seed.fitReason });
+    required(match.status === "ok" ? match : null, "match");
+
+    travelTo(at(seed.receivedDaysAgo, 4));
+    required(await store.claimSponsorship(sponsorship.id, ["writing"]), "claim write");
+    const inserted = await store.insertBranch({
+      videoId: video.id,
+      sponsorshipId: sponsorship.id,
+      baseScript: video.script,
+      script: insertSegment(video.script, seed.afterParagraph, seed.segment),
+      segmentSummary: seed.segmentSummary,
+    });
+    const branch = required(inserted.status === "created" ? inserted.branch : null, "branch");
+    required(await store.markBranched(sponsorship.id), "branched");
+    const notification = await store.insertNotification(branch.id);
+    const notificationId = required(notification.status === "created" ? notification.notification.id : null, "notification");
+
+    if (!seed.decision) {
+      continue;
+    }
+    travelTo(at(seed.decision.daysAgo));
+    await store.markNotificationsRead([notificationId]);
+    const decided = await store.decideBranch(branch.id, seed.decision.status);
+    const generating = required(decided.status === "ok" ? decided.draft : null, "decision");
+    const draft = required(
+      await store.completeDraftGeneration(generating.id, generating.requestId, {
+        toEmail: seed.email.replyTo ?? seed.email.fromEmail,
+        cc: seed.email.cc,
+        subject: `Re: ${seed.email.subject}`,
+        body: seed.decision.replyBody,
+      }),
+      "draft",
+    );
+    if (seed.decision.sentDaysAgo === undefined) {
+      continue;
+    }
+    const sentAt = at(seed.decision.sentDaysAgo);
+    travelTo(sentAt);
+    required(await store.claimDraftSend(draft.id), "claim send");
+    required(await store.markDraftSent(draft.id, { gmailMessageId: `${seed.email.gmailMessageId}-reply`, sentAt }), "sent");
+  }
+};
+
+export const SEED_STEPS: readonly SeedStep[] = [seedVideos, seedSponsorships];
 
 export async function seedDemoData(context: SeedContext): Promise<void> {
   try {

@@ -186,6 +186,25 @@ describe("Supabase store adapter", () => {
     expect(requests).toHaveLength(0);
   });
 
+  it("checks for a sending or sent reply through the video's branches with one row at most", async () => {
+    const { store, requests } = fakeClient((request) => ({
+      status: 200,
+      body: request.url.searchParams.get("branches.video_id") === `eq.${VIDEO_ID}` ? [{ id: "d", branches: { video_id: VIDEO_ID } }] : [],
+    }));
+    expect(await store.hasSendingOrSentReply(VIDEO_ID)).toBe(true);
+    expect(requests[0].method).toBe("GET");
+    expect(requests[0].url.pathname).toBe("/rest/v1/email_drafts");
+    expect(Object.fromEntries(requests[0].url.searchParams)).toEqual({
+      select: "id,branches!inner(video_id)",
+      "branches.video_id": `eq.${VIDEO_ID}`,
+      status: "in.(sending,sent)",
+      limit: "1",
+    });
+    expect(await store.hasSendingOrSentReply("22222222-2222-4222-8222-222222222222")).toBe(false);
+    expect(await store.hasSendingOrSentReply("nope")).toBe(false);
+    expect(requests).toHaveLength(2);
+  });
+
   it("rejects an unexpected delete_video result", async () => {
     const { store } = fakeClient(() => ({ status: 200, body: "something else" }));
     expect((await catchStoreError(store.deleteVideo(VIDEO_ID))).code).toBe("database");

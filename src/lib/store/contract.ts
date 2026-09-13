@@ -329,17 +329,87 @@ export function describeStoreContract(
         expect(await store.deleteVideo("not-a-uuid")).toBe("not_found");
       });
 
-      it("blocks deleting a video once a reply is sending or sent", async () => {
+      it("reports whether a reply for one of a video's branches is sending or sent", async () => {
+        const { video, branch } = await branchFixture();
+        const second = await writingSponsorship(video, { brand: "Second" });
+        const secondBranch = await store.insertBranch({
+          videoId: video.id,
+          sponsorshipId: second.id,
+          baseScript: video.script,
+          script: `${video.script} Second segment.`,
+          segmentSummary: "Adds a second sponsor read",
+        });
+        expect(secondBranch.status).toBe("created");
+        const other = await branchFixture({ brand: "Other" });
+        const otherDraft = await readyDraft(other.branch);
+        const empty = await newVideo();
+
+        expect(await store.hasSendingOrSentReply(video.id)).toBe(false);
+        const decided = await store.decideBranch(branch.id, "approved");
+        expect(decided.status).toBe("ok");
+        expect(await store.hasSendingOrSentReply(video.id)).toBe(false);
+        const draft = await readyDraft(branch);
+        expect(await store.hasSendingOrSentReply(video.id)).toBe(false);
+
+        expect(await store.claimDraftSend(draft.id)).not.toBeNull();
+        expect(await store.hasSendingOrSentReply(video.id)).toBe(true);
+        expect(await store.releaseDraftSend(draft.id, { error: "Gmail send failed" })).not.toBeNull();
+        expect(await store.hasSendingOrSentReply(video.id)).toBe(false);
+
+        expect(await store.claimDraftSend(draft.id)).not.toBeNull();
+        await store.markDraftSent(draft.id, { gmailMessageId: "gmail-sent-2", sentAt: new Date("2026-09-02T00:00:00.000Z") });
+        expect(await store.hasSendingOrSentReply(video.id)).toBe(true);
+        expect(await store.hasSendingOrSentReply(other.video.id)).toBe(false);
+
+        expect(await store.claimDraftSend(otherDraft.id)).not.toBeNull();
+        expect(await store.hasSendingOrSentReply(other.video.id)).toBe(true);
+        expect(await store.hasSendingOrSentReply(empty.id)).toBe(false);
+        expect(await store.hasSendingOrSentReply(UNKNOWN_UUID)).toBe(false);
+        expect(await store.hasSendingOrSentReply("not-a-uuid")).toBe(false);
+      });
+
+      it("blocks deleting a video once a reply is sending or sent, and only that video", async () => {
         const { video, branch, sponsorship } = await branchFixture();
         const draft = await readyDraft(branch);
+        // Other videos with ready drafts, deleted while this video's reply is sending and sent.
+        const whileSending = await branchFixture({ brand: "Other sending" });
+        await readyDraft(whileSending.branch);
+        const whileSent = await branchFixture({ brand: "Other sent" });
+        await readyDraft(whileSent.branch);
+
         expect(await store.claimDraftSend(draft.id)).not.toBeNull();
         expect(await store.deleteVideo(video.id)).toBe("reply_sent");
+        expect(await store.deleteVideo(whileSending.video.id)).toBe("deleted");
 
         await store.markDraftSent(draft.id, { gmailMessageId: "gmail-sent-1", sentAt: new Date("2026-09-02T00:00:00.000Z") });
         expect(await store.deleteVideo(video.id)).toBe("reply_sent");
-        expect(await store.getVideo(video.id)).not.toBeNull();
-        expect(await store.getBranch(branch.id)).not.toBeNull();
-        expect(await store.getSponsorship(sponsorship.id)).toMatchObject({ status: "branched", videoId: video.id });
+        const before = {
+          video: await store.getVideo(video.id),
+          branch: await store.getBranch(branch.id),
+          draft: await store.getEmailDraft(draft.id),
+          sponsorship: await store.getSponsorship(sponsorship.id),
+        };
+        expect(await store.deleteVideo(whileSent.video.id)).toBe("deleted");
+
+        for (const other of [whileSending, whileSent]) {
+          expect(await store.getVideo(other.video.id)).toBeNull();
+          expect(await store.getBranch(other.branch.id)).toBeNull();
+          expect(await store.getEmailDraftByBranchId(other.branch.id)).toBeNull();
+          expect(await store.getSponsorship(other.sponsorship.id)).toMatchObject({
+            status: "no_fit",
+            fitReason: VIDEO_DELETED_REASON,
+            videoId: null,
+          });
+        }
+
+        expect(before.video).not.toBeNull();
+        expect(before.branch).not.toBeNull();
+        expect(before.draft).toMatchObject({ status: "sent", gmailMessageId: "gmail-sent-1" });
+        expect(before.sponsorship).toMatchObject({ status: "branched", videoId: video.id });
+        expect(await store.getVideo(video.id)).toEqual(before.video);
+        expect(await store.getBranch(branch.id)).toEqual(before.branch);
+        expect(await store.getEmailDraft(draft.id)).toEqual(before.draft);
+        expect(await store.getSponsorship(sponsorship.id)).toEqual(before.sponsorship);
       });
     });
 
@@ -1165,6 +1235,40 @@ export function describeStoreContract(
               draft: { status: "generating", kind: draftKindForDecision(decision) },
             },
             { decided: "locked", sending: "sending", branch: "approved", draft: { status: "sending", kind: "accept" } },
+          ]).toContainEqual(outcome);
+        }
+      });
+
+      it("either deletes the video or keeps the reply when a delete overlaps a send claim", async () => {
+        for (const deleteStartsFirst of [true, false]) {
+          const { video, sponsorship, branch } = await branchFixture();
+          const draft = await readyDraft(branch);
+          // Object properties are evaluated in source order, so both calls start in that order
+          // before either is awaited.
+          const started = deleteStartsFirst
+            ? { deleted: store.deleteVideo(video.id), sending: store.claimDraftSend(draft.id) }
+            : { sending: store.claimDraftSend(draft.id), deleted: store.deleteVideo(video.id) };
+          const [deleted, sending] = await Promise.all([started.deleted, started.sending]);
+          const outcome = {
+            deleted,
+            sending: sending?.status ?? null,
+            video: (await store.getVideo(video.id)) !== null,
+            branch: (await store.getBranch(branch.id)) !== null,
+            draft: (await store.getEmailDraft(draft.id))?.status ?? null,
+            sponsorship: (await store.getSponsorship(sponsorship.id))?.status,
+          };
+          // Either the delete lands first and nothing is left to send, or the claim lands first
+          // and the video keeps its sent history. Never a reply going out for deleted rows.
+          expect([
+            { deleted: "deleted", sending: null, video: false, branch: false, draft: null, sponsorship: "no_fit" },
+            {
+              deleted: "reply_sent",
+              sending: "sending",
+              video: true,
+              branch: true,
+              draft: "sending",
+              sponsorship: "branched",
+            },
           ]).toContainEqual(outcome);
         }
       });

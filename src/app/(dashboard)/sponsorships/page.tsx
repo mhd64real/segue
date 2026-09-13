@@ -5,7 +5,7 @@ export default function SponsorshipsPage() {
   return (
     <>
       <PageHeader title="Sponsorships" />
-      <Typography color="text.secondary">No sponsorship emails yet.</Typography>
+      <Typography sx={{ color: "text.secondary" }}>No sponsorship emails yet.</Typography>
     </>
   );
 }

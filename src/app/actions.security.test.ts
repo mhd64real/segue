@@ -280,6 +280,7 @@ afterEach(() => {
 describe("Server Actions fail closed", () => {
   it("every export of every src/app/**/actions.ts rejects unauthenticated callers without touching data", async () => {
     expect(Object.keys(appSources).sort()).toEqual(Object.keys(appActions).sort());
+    expect(Object.keys(appActions)).toContain("/src/app/(dashboard)/videos/actions.ts");
     expect(await probeActionModules(appActions, appSources)).toEqual([]);
   });
 });

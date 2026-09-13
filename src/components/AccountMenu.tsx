@@ -44,7 +44,7 @@ export default function AccountMenu({ email }: { email: string }) {
         transformOrigin={{ vertical: "top", horizontal: "right" }}
       >
         <Box sx={{ px: 2, pt: 1, pb: 1.5, maxWidth: 280 }}>
-          <Typography variant="caption" color="text.secondary" component="p">
+          <Typography variant="caption" component="p" sx={{ color: "text.secondary" }}>
             Signed in as
           </Typography>
           <Typography variant="body2" noWrap title={email}>

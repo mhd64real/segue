@@ -125,6 +125,9 @@ export function createMemoryStore(options: MemoryStoreOptions = {}): MemoryStore
     return status === "sending" || status === "sent";
   };
 
+  const videoHasLockedReply = (videoId: string) =>
+    [...branches.values()].some((branch) => branch.videoId === videoId && isReplyLocked(branch.id));
+
   const claimInbox = (gmailMessageId: string | null) => {
     const now = clock.now();
     const candidates = [...inbox.values()]
@@ -331,15 +334,19 @@ export function createMemoryStore(options: MemoryStoreOptions = {}): MemoryStore
       return clone(video);
     },
 
+    async hasSendingOrSentReply(videoId) {
+      return videoHasLockedReply(videoId);
+    },
+
     async deleteVideo(id) {
       const video = videos.get(id);
       if (!video) {
         return "not_found";
       }
-      const videoBranches = [...branches.values()].filter((branch) => branch.videoId === id);
-      if (videoBranches.some((branch) => isReplyLocked(branch.id))) {
+      if (videoHasLockedReply(id)) {
         return "reply_sent";
       }
+      const videoBranches = [...branches.values()].filter((branch) => branch.videoId === id);
       const now = clock.now();
       for (const sponsorship of sponsorships.values()) {
         if (sponsorship.videoId !== id) {

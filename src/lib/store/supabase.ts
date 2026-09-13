@@ -422,6 +422,22 @@ export function createSupabaseStore(db: AdminClient, options: SupabaseStoreOptio
       return row ? toVideo(row) : null;
     },
 
+    async hasSendingOrSentReply(videoId) {
+      if (!isUuid(videoId)) {
+        return false;
+      }
+      const rows = check(
+        "hasSendingOrSentReply",
+        await db
+          .from("email_drafts")
+          .select("id, branches!inner(video_id)")
+          .eq("branches.video_id", videoId)
+          .in("status", ["sending", "sent"])
+          .limit(1),
+      );
+      return rows.length > 0;
+    },
+
     async deleteVideo(id) {
       if (!isUuid(id)) {
         return "not_found";
