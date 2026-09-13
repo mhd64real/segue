@@ -17,7 +17,7 @@ Personal dashboard: watches Gmail for sponsorship offers, writes sponsor-integra
 
 - Stock MUI components only, theme tokens, `slotProps` and `sx`. No custom design layer, no hardcoded colors or font sizes.
 - UI copy states facts and stops. No emojis. Never use the em dash or en dash characters anywhere (code, comments, copy, docs).
-- Every page, Server Action and owner route reads and writes data only through `ownerStore()`. Never import the admin Supabase client from a client component.
+- Every page, Server Action and owner route reads and writes data only through `src/lib/owner.ts`: `ownerStore()` in pages and layouts (redirects to `/login`), `ownerStoreForAction()` as the first call in Server Actions and owner routes (returns `{ ok: false, error: "unauthorized" }`). `src/app/actions.security.test.ts` checks every `actions.ts` export. Never import the admin Supabase client from a client component.
 - External services go through ports (`Store`, `GmailPort`, `LlmPort`) so the pipeline stays testable offline.
 - The app, every route and the build must work with no env vars set: fail closed, never crash.
 - Never log or store email content or model output in `error` columns or logs.

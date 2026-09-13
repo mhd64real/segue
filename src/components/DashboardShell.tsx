@@ -21,6 +21,7 @@ import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import VideoLibraryOutlinedIcon from "@mui/icons-material/VideoLibraryOutlined";
+import AccountMenu from "@/components/AccountMenu";
 import { APP_NAME } from "@/config";
 
 const DRAWER_WIDTH = 240;
@@ -31,7 +32,7 @@ const NAV_ITEMS = [
   { href: "/emails", label: "Emails", icon: <EmailOutlinedIcon /> },
 ];
 
-export default function DashboardShell({ children }: { children: React.ReactNode }) {
+export default function DashboardShell({ children, ownerEmail }: { children: React.ReactNode; ownerEmail: string }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [notificationsAnchor, setNotificationsAnchor] = React.useState<HTMLElement | null>(null);
@@ -91,6 +92,7 @@ export default function DashboardShell({ children }: { children: React.ReactNode
           >
             <MenuItem disabled>No notifications</MenuItem>
           </Menu>
+          <AccountMenu email={ownerEmail} />
         </Toolbar>
       </AppBar>
 

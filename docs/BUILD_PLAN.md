@@ -43,7 +43,7 @@ Check now (topbar) -> same sync + runPipeline
 Dashboard: Server Components + Server Actions -> ownerStore() -> Supabase admin client (secret key, server only)
 ```
 
-- **Auth:** Supabase Auth with Google (PKCE). `src/proxy.ts` refreshes the session with `getClaims()` and redirects pages to `/login`. The real gate is `ownerStore()`: every page, Server Action, and owner route gets data only through it, and it checks claims plus `email === ALLOWED_EMAIL` on every call (layouts do not re-run per action, so a layout check alone is not enough). Missing env means "not signed in", never a crash.
+- **Auth:** Supabase Auth with Google (PKCE). `src/proxy.ts` refreshes the session with `getClaims()` and redirects pages to `/login`. The real gate is `ownerStore()`: every page, Server Action, and owner route gets data only through it, and it checks claims plus `email === ALLOWED_EMAIL` and a Google sign-in (`amr` contains `oauth`) on every call (layouts do not re-run per action, so a layout check alone is not enough). Missing env means "not signed in", never a crash.
 - **Data:** tables in `public`, RLS on, zero grants to `anon` and `authenticated`, explicit grants to `service_role` (new Supabase projects no longer auto-grant, even to `service_role`). The browser never reads the database.
 - **Ports:** `GmailPort`, `LlmPort`, `Store`, each with a real and a fake implementation. The pipeline takes `{ store, gmail, llm, clock }` and is fully testable offline.
 - **Idempotent writes instead of transactions:** every insert that can be retried uses a unique key with `on conflict do nothing` (sponsorship per message and per thread, branch per sponsorship, notification per branch), and each step checks for its own finished output before calling the model. A crash between writes just finishes on the next claim.
@@ -110,9 +110,9 @@ Each phase: build, tests, demo-mode screenshots for UI work (1440 and 390 wide),
 
 ### Phase 2: Sign in
 - `src/proxy.ts` (matcher excludes `_next`, static files, `/api/gmail/push`, `/api/cron`). Without Supabase env it lets requests through; pages then show the sign-in screen with "Setup is not finished".
-- `src/lib/owner.ts`: `ownerStore()` (claims + allowlist, or the demo store in demo mode).
+- `src/lib/owner.ts`: `ownerStore()` (claims + allowlist + Google sign-in method, or the demo store in demo mode). A password, OTP or magic link session for the allowed email is not allowed.
 - `/login`: "Sign in with Google" calling `signInWithOAuth` with full scope URLs `https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send` and `queryParams { access_type: "offline", prompt: "consent" }`. Messages for not allowed, missing permissions, not configured, failed.
-- `/auth/callback`: `exchangeCodeForSession`; wrong email: delete that auth user with the admin API, sign out, redirect with error; check granted scopes via Google tokeninfo on `provider_token` (he can untick send on the consent screen); require `provider_refresh_token`; encrypt and save to `app_state`, clear `needs_reauth`; redirect to `/videos`.
+- `/auth/callback`: `exchangeCodeForSession`, then `setSession` with the Supabase tokens only, so the JS-readable session cookie no longer holds the Google tokens (a failed rewrite is a failed sign in); wrong email or sign-in method: delete that auth user with the admin API, sign out, redirect with error; check granted scopes via Google tokeninfo on `provider_token` (he can untick send on the consent screen); require `provider_refresh_token`; encrypt and save to `app_state`, clear `needs_reauth`; redirect to `/videos` or the remembered page. Every error redirect keeps that page in `next`, so a retry returns to it.
 - `/auth/signout`, `AccountMenu` (email, Sign out).
 - Demo mode plumbing and guard.
 - Tests: allowlist, callback decisions (pure function), demo guard, and a generic test that imports every `actions.ts` export and asserts it rejects with no session and with no env.
@@ -173,7 +173,7 @@ Runbook in `docs/SETUP.md`, in this order:
 1. Supabase secret key into `.env.local`; run `pnpm test:supabase`.
 2. Confirm which Google account is the channel inbox; set `ALLOWED_EMAIL`.
 3. Google Cloud: create project; enable Gmail API and Pub/Sub API; Auth Platform branding, audience External then Publish app, data access scopes, Web client (origins for Vercel and localhost, redirect URI `https://tzkvqtcczbwioevojejm.supabase.co/auth/v1/callback`). Client id and secret into `.env.local`.
-4. Supabase: Google provider on with the same client id and secret; URL configuration (Site URL and redirect URLs for Vercel and localhost).
+4. Supabase: Google provider on with the same client id and secret; Email provider off (sign-ups stay allowed, so the first Google sign-in can create the user); URL configuration (Site URL and redirect URLs for Vercel and localhost).
 5. Pub/Sub: topic; Publisher role for `gmail-api-push@system.gserviceaccount.com`; push service account; Token Creator for the Pub/Sub service agent; push subscription to `https://segue-five.vercel.app/api/gmail/push` with that account and audience. Values into `.env.local`.
 6. Generate `TOKEN_ENCRYPTION_KEY` and `CRON_SECRET` locally; Anthropic API key; set a monthly spend limit on the Anthropic workspace.
 7. Push env vars to Vercel production from `.env.local` without printing values; redeploy.

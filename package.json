@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:supabase": "SEGUE_SUPABASE_CONTRACT=1 vitest run src/lib/store/supabase.contract.test.ts"
