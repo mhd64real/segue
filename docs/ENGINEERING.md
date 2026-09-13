@@ -29,7 +29,8 @@ Next.js 16.3.5, React 19.2.8, MUI 9.4.0 (`@mui/material-nextjs/v16-appRouter`), 
 - SSR clients follow the current docs: `createBrowserClient(url, publishableKey)`; server `createServerClient` with `cookies: { getAll, setAll(cookiesToSet, headers) }` (ignore the set error inside Server Components); proxy `updateSession` builds the client on the request, calls `supabase.auth.getClaims()` immediately, and returns the same response object, also copying the `headers` passed to `setAll`.
 - Protect with `getClaims()`, never `getSession()` on the server.
 - Admin client: `createClient(url, secretKey, { auth: { autoRefreshToken: false, persistSession: false } })` in a `server-only` module. Secret keys bypass RLS but table GRANTS are still required.
-- **New projects do not auto-grant tables to any role, including `service_role`.** Every table needs `grant select, insert, update, delete on table public.x to service_role`, every function `grant execute ... to service_role`. Missing grants return Postgres error `42501`.
+- **Never rely on default grants.** Every table needs `grant select, insert, update, delete on table public.x to service_role`, every function `grant execute ... to service_role`. Missing grants return Postgres error `42501`. In this project `pg_default_acl` still gives new `public` tables and functions to `anon`, `authenticated` and `service_role` (checked 2026-09-13), and Postgres gives `execute` to `public`, so every migration also runs `revoke all ... from public, anon, authenticated, service_role` before its grants.
+- supabase-js 2.116 retries idempotent reads (GET, HEAD) after network errors and HTTP 503 or 520, with backoff, up to 3 times. RPC calls and writes are never retried.
 - Google sign-in: `signInWithOAuth({ provider: "google", options: { redirectTo, scopes: "https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send", queryParams: { access_type: "offline", prompt: "consent" } } })`. `provider_token` and `provider_refresh_token` exist only on the session returned by `exchangeCodeForSession` in the callback. Supabase never stores or refreshes them.
 - Schema changes: SQL file in `supabase/migrations/`, applied with the Supabase MCP `apply_migration`, then `get_advisors`, then `generate_typescript_types`.
 
@@ -40,6 +41,7 @@ All `security invoker`, `set search_path = ''`, fully qualified names, `execute`
 - Claim a unit of work: `attempts = attempts + 1`, `lease_expires_at = now() + lease`, only when `(lease_expires_at is null or lease_expires_at < now()) and attempts < 3` and the status is the expected one. Returns the row or nothing.
 - Advance `app_state.history_id` only forward (numeric compare).
 - Anything else that needs an atomic read-modify-write.
+- Migration 1 defines: `claim_inbox_message`, `release_inbox_message`, `settle_inbox_message`, `claim_sponsorship`, `release_sponsorship`, `settle_sponsorship`, `retry_sponsorship`, `record_sponsor_reply`, `reclaim_expired_leases`, `advance_history_id`, `delete_video`, `update_branch_script`, `decide_branch`, `claim_draft_send`. Row locks are always taken in the order video, branch, draft. The `Store` in `src/lib/store` is the only caller.
 
 ## Gmail API
 

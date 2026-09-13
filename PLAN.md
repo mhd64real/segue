@@ -10,21 +10,22 @@ A personal dashboard for one YouTube channel. It watches Gmail for sponsorship o
 4. A new email arrives. The agent decides: sponsorship or not.
    - Not a sponsorship: ignored, nothing stored.
    - Sponsorship: appears on the Sponsorships page as **Processing**.
+   - A sponsor's reply inside a thread Segue already knows never creates a second sponsorship. The existing row shows **Sponsor replied**.
 5. The agent checks it against every monitored video and picks the single best fit.
-   - No fit: status **No fit**, with the reason.
+   - No fit: status **No fit**, with the reason. **Match again** checks it against the videos monitored now, for example a video added later.
    - Fit: a branch is created on that video, status **Branched**, and the topbar bell shows "New branch".
 6. Branch page: original script on the left, branch on the right, sponsor lines highlighted. The branch is editable.
-7. **Approve** marks the branch approved and drafts an acceptance reply. **Reject** marks it rejected and drafts a polite decline.
-8. Emails page: review, edit, **Send**. It goes out as a reply in the sponsor's original Gmail thread.
+7. **Approve** marks the branch approved and drafts an acceptance reply. **Reject** marks it rejected and drafts a polite decline. If the branch is edited after its draft was written, **Redraft** writes the draft again from the edited branch.
+8. Emails page: review, edit To, Cc and body, **Send**. It goes out as a reply in the sponsor's original Gmail thread. The subject stays locked to "Re: original subject", because changing it breaks Gmail threading.
 
 ## 2. Screens (stock MUI components, theme tokens only)
 
 - **Sidebar:** Videos, Sponsorships, Emails.
 - **Topbar:** notification bell (new branches), Gmail monitor health (last checked, last error, Check now), account menu.
-- **Videos:** list, New video, and a Video page (edit title and script, monitoring switch, branches with sponsor and status).
-- **Branch:** side-by-side view, editable right side, Approve and Reject.
-- **Sponsorships:** every sponsorship email with sender, brand, subject, received date, status (Processing, Branched, No fit, Failed), matched video, reason, and Retry on Failed.
-- **Emails:** Drafts and Sent tabs. Edit subject and body, then Send.
+- **Videos:** list, New video, and a Video page (edit title and script, monitoring switch, branches with sponsor and status, Delete). Deleting a video is blocked once a reply for one of its branches has been sent, so the history stays.
+- **Branch:** side-by-side view, editable right side, Approve and Reject, Redraft when the branch was edited after its draft.
+- **Sponsorships:** every sponsorship email with sender, brand, subject, received date, status (Processing, Branched, No fit, Failed), matched video, reason, Sponsor replied, Retry on Failed, and Match again on No fit.
+- **Emails:** Drafts and Sent tabs. Edit To, Cc and body, then Send. The subject is locked to "Re: original subject".
 
 ## 3. Stack
 
@@ -57,12 +58,12 @@ Each step saves its result, so a failure resumes where it stopped.
 
 | Table | Holds |
 |---|---|
-| `google_account` | email, encrypted refresh token, history ID, watch expiry, last checked, last error |
+| `app_state` | Google email, encrypted refresh token, history ID, watch expiry, last checked, last error, reconnect and AI paused flags |
 | `videos` | title, script, monitoring on/off |
-| `seen_messages` | Gmail message ID, is sponsorship (dedupe only, no content for normal mail) |
-| `sponsorships` | message and thread ID, sender, subject, body, received, brand, offer summary, status, matched video, reason, error |
+| `inbox_messages` | Gmail message ID and processing status (dedupe only, no content for normal mail) |
+| `sponsorships` | message and thread ID, sender, subject, body, received, brand, offer summary, status, matched video, reason, error, last sponsor reply |
 | `branches` | video, sponsorship, snapshot of the original, branch script, status (pending, approved, rejected) |
-| `email_drafts` | sponsorship, branch, kind (accept, decline), to, subject, body, status (draft, sent), sent at |
+| `email_drafts` | branch, kind (accept, decline), to, cc, locked subject, body, status (generating, draft, failed, sending, sent), sent at |
 | `notifications` | branch, read at |
 
 ## 7. Build phases
@@ -86,3 +87,6 @@ Each step saves its result, so a failure resumes where it stopped.
 - Several sponsorships can branch the same video. Approving one does not affect the others.
 - The sponsor segment always says clearly that it is sponsored (FTC and YouTube paid promotion rules). Blended into the story, never hidden.
 - Once a draft is sent, that branch's decision is locked.
+- A sponsor's follow-up in a known thread updates the existing sponsorship ("Sponsor replied"), never a second one.
+- The reply subject is always "Re: original subject". To and Cc stay editable.
+- A video with a sent reply on one of its branches cannot be deleted.
