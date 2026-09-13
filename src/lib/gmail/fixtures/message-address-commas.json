@@ -1,0 +1,58 @@
+{
+  "id": "19207c2d3e4f5066",
+  "threadId": "19207c2d3e4f5066",
+  "labelIds": [
+    "INBOX"
+  ],
+  "snippet": "Address parsing fixture.",
+  "payload": {
+    "partId": "",
+    "mimeType": "text/plain",
+    "filename": "",
+    "headers": [
+      {
+        "name": "MIME-Version",
+        "value": "1.0"
+      },
+      {
+        "name": "Date",
+        "value": "Mon, 21 Sep 2026 09:00:00 +0100"
+      },
+      {
+        "name": "Message-ID",
+        "value": "<commas.8@brand.example>"
+      },
+      {
+        "name": "Subject",
+        "value": "Addresses"
+      },
+      {
+        "name": "From",
+        "value": "\"Doe, John\" <john.doe@brand.example>"
+      },
+      {
+        "name": "To",
+        "value": "\"Smith, Jane (PR)\" <jane@agency.example>, creator@example.com, \"Quote \\\"Q\\\" Person\" <q@agency.example>"
+      },
+      {
+        "name": "Cc",
+        "value": "\"O'Brien, Pat\" <pat@brand.example>, =?UTF-8?Q?M=C3=BCller=2C_Anna?= <anna@brand.example>, undisclosed-recipients:;, Team: lead@brand.example, <solo@brand.example>;"
+      },
+      {
+        "name": "Reply-To",
+        "value": "partnerships@brand.example (Brand Partnerships)"
+      },
+      {
+        "name": "Content-Type",
+        "value": "text/plain; charset=UTF-8"
+      }
+    ],
+    "body": {
+      "size": 26,
+      "data": "QWRkcmVzcyBwYXJzaW5nIGZpeHR1cmUuDQo"
+    }
+  },
+  "sizeEstimate": 712,
+  "historyId": "4844400",
+  "internalDate": "1790064000000"
+}

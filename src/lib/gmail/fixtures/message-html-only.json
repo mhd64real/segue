@@ -1,0 +1,92 @@
+{
+  "id": "19200a4b6c8d0e22",
+  "threadId": "19200a4b6c8d0e22",
+  "labelIds": [
+    "UNREAD",
+    "CATEGORY_UPDATES",
+    "INBOX"
+  ],
+  "snippet": "Hello Creator, We&#39;d love to work with you on a paid partnership for &quot;Cast Iron Cooking&quot;.",
+  "payload": {
+    "partId": "",
+    "mimeType": "text/html",
+    "filename": "",
+    "headers": [
+      {
+        "name": "Delivered-To",
+        "value": "creator@example.com"
+      },
+      {
+        "name": "Received",
+        "value": "by 2002:a05:6a10:8e0b:b0:5c4:1f2a:9d31 with SMTP id z11csp412345pxb; Thu, 17 Sep 2026 11:30:00 +0000"
+      },
+      {
+        "name": "X-Google-Smtp-Source",
+        "value": "AGHT+IFq3v1c9T0x0exampleexampleexample"
+      },
+      {
+        "name": "X-Received",
+        "value": "by 2002:a17:907:3e8c:b0:a7d:4f1e:2b0 with SMTP id hs12mr5566771ejc.33; Thu, 17 Sep 2026 11:30:00 +0000"
+      },
+      {
+        "name": "ARC-Seal",
+        "value": "i=1; a=rsa-sha256; t=1789372800; cv=none; d=google.com; s=arc-20240605; b=Zm9vYmFyZXhhbXBsZQ=="
+      },
+      {
+        "name": "Return-Path",
+        "value": "<bounces@mail.brand.example>"
+      },
+      {
+        "name": "Received-SPF",
+        "value": "pass (google.com: domain of bounces@mail.brand.example designates 192.0.2.10 as permitted sender) client-ip=192.0.2.10;"
+      },
+      {
+        "name": "Authentication-Results",
+        "value": "mx.google.com; dkim=pass header.i=@brand.example; spf=pass smtp.mailfrom=bounces@mail.brand.example; dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=brand.example"
+      },
+      {
+        "name": "DKIM-Signature",
+        "value": "v=1; a=rsa-sha256; c=relaxed/relaxed; d=brand.example; s=s1; h=from:to:subject:date:message-id; bh=ZXhhbXBsZQ==; b=ZXhhbXBsZXNpZ25hdHVyZQ=="
+      },
+      {
+        "name": "MIME-Version",
+        "value": "1.0"
+      },
+      {
+        "name": "Date",
+        "value": "Thu, 17 Sep 2026 11:30:00 +0000"
+      },
+      {
+        "name": "Message-ID",
+        "value": "<0100019200a4b6c8-offer@email.hearthandfield.example>"
+      },
+      {
+        "name": "Subject",
+        "value": "Partnership offer"
+      },
+      {
+        "name": "From",
+        "value": "Hearth and Field <hello@hearthandfield.example>"
+      },
+      {
+        "name": "To",
+        "value": "creator@example.com"
+      },
+      {
+        "name": "Content-Type",
+        "value": "text/html; charset=UTF-8"
+      },
+      {
+        "name": "Content-Transfer-Encoding",
+        "value": "quoted-printable"
+      }
+    ],
+    "body": {
+      "size": 925,
+      "data": "PCFET0NUWVBFIGh0bWw-DQo8aHRtbD4NCjxoZWFkPg0KICA8bWV0YSBjaGFyc2V0PSJ1dGYtOCI-DQogIDx0aXRsZT5QYXJ0bmVyc2hpcCBvZmZlcjwvdGl0bGU-DQogIDxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI-cCB7IGNvbG9yOiAjMzMzOyB9IC5oaWRkZW4geyBkaXNwbGF5OiBub25lOyB9PC9zdHlsZT4NCiAgPHNjcmlwdD53aW5kb3cudHJhY2soIm9wZW4iKTs8L3NjcmlwdD4NCjwvaGVhZD4NCjxib2R5Pg0KICA8IS0tIHRyYWNraW5nIGNvbW1lbnQgLS0-DQogIDx0YWJsZSByb2xlPSJwcmVzZW50YXRpb24iPjx0cj48dGQ-SGVsbG8gICBDcmVhdG9yLDwvdGQ-PC90cj48L3RhYmxlPg0KICA8cD5XZSZyc3F1bztkIGxvdmUgdG8gd29yayB3aXRoIHlvdSBvbiBhIDxiPnBhaWQ8L2I-DQogICAgIHBhcnRuZXJzaGlwJm5ic3A7Zm9yICZxdW90O0Nhc3QgSXJvbiBDb29raW5nJnF1b3Q7LjwvcD4NCiAgPHA-QnVkZ2V0OiZuYnNwOzY1MCZuYnNwOyZldXJvOyAmYW1wOyBwcm9kdWN0PGJyPkRlYWRsaW5lOiBPY3RvYmVyJm5ic3A7MzA8YnIvPkNvbnRhY3Q6IEEgJmx0O2ImZ3Q7IHRhZyBzdGF5cyB0ZXh0PC9wPg0KICA8dWw-DQogICAgPGxpPk9uZSBzaG9ydCBzZWdtZW50PC9saT4NCiAgICA8bGk-TGluayBpbiB0aGUgZGVzY3JpcHRpb248L2xpPg0KICA8L3VsPg0KICA8ZGl2PlByaWNlIGNoZWNrOiA1ICZsdDsgNiBhbmQgNyAmZ3Q7IDQgJiMxNjk7ICYjeDIxMjI7ICYjMTI4OzwvZGl2Pg0KICA8cHJlPkxpbmUgb25lDQogIGluZGVudGVkIGxpbmU8L3ByZT4NCiAgPHAgc3R5bGU9ImRpc3BsYXk6bm9uZSI-JmFtcDtsdDtub3QgYSB0YWcmYW1wO2d0OzwvcD4NCiAgPHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPmRvY3VtZW50LndyaXRlKCI8cD5oaWRkZW48L3A-Iik8L3NjcmlwdD4NCjwvYm9keT4NCjwvaHRtbD4NCg"
+    }
+  },
+  "sizeEstimate": 8120,
+  "historyId": "4842210",
+  "internalDate": "1789644600000"
+}

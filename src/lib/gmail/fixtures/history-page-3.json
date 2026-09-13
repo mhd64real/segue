@@ -1,0 +1,27 @@
+{
+  "history": [
+    {
+      "id": "4840077",
+      "messages": [
+        {
+          "id": "191f5d0e33aa9c01",
+          "threadId": "191f5d0e33aa9c01"
+        }
+      ],
+      "messagesAdded": [
+        {
+          "message": {
+            "id": "191f5d0e33aa9c01",
+            "threadId": "191f5d0e33aa9c01",
+            "labelIds": [
+              "UNREAD",
+              "INBOX",
+              "SENT"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "historyId": "4840112"
+}

@@ -1,0 +1,59 @@
+{
+  "id": "191f5d0e33aa9c01",
+  "threadId": "191f5d0e33aa9c01",
+  "labelIds": [
+    "UNREAD",
+    "INBOX"
+  ],
+  "snippet": "Hi there, Quick question: do you take sponsored segments? -- Dana",
+  "payload": {
+    "partId": "",
+    "mimeType": "text/plain",
+    "filename": "",
+    "headers": [
+      {
+        "name": "Delivered-To",
+        "value": "creator@example.com"
+      },
+      {
+        "name": "MIME-Version",
+        "value": "1.0"
+      },
+      {
+        "name": "Date",
+        "value": "Wed, 16 Sep 2026 08:00:00 -0400"
+      },
+      {
+        "name": "Message-ID",
+        "value": "<20260916120000.1a2b3c@hearthandfield.example>"
+      },
+      {
+        "name": "Subject",
+        "value": "Quick question"
+      },
+      {
+        "name": "From",
+        "value": "dana@hearthandfield.example"
+      },
+      {
+        "name": "To",
+        "value": "creator@example.com"
+      },
+      {
+        "name": "Content-Type",
+        "value": "text/plain; charset=utf-8"
+      },
+      {
+        "name": "Content-Transfer-Encoding",
+        "value": "quoted-printable"
+      }
+    ],
+    "body": {
+      "size": 79,
+      "data": "SGkgdGhlcmUsICANCg0KUXVpY2sgcXVlc3Rpb246IGRvIHlvdSB0YWtlIHNwb25zb3JlZCBzZWdtZW50cz8NCg0KLS0gDQpEYW5hDQoNCg"
+    }
+  },
+  "sizeEstimate": 1204,
+  "historyId": "4841500",
+  "internalDate": "1789560000000"
+}

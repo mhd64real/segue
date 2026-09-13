@@ -1,0 +1,59 @@
+{
+  "id": "19206b1c2d3e4f55",
+  "threadId": "19206b1c2d3e4f55",
+  "labelIds": [
+    "UNREAD",
+    "INBOX"
+  ],
+  "snippet": "Hola, ¿te interesa un patrocinio?",
+  "payload": {
+    "partId": "",
+    "mimeType": "text/plain",
+    "filename": "",
+    "headers": [
+      {
+        "name": "MIME-Version",
+        "value": "1.0"
+      },
+      {
+        "name": "Date",
+        "value": "Sun, 20 Sep 2026 18:45:00 -0300"
+      },
+      {
+        "name": "Message-ID",
+        "value": "<encoded.words.7@marca.example>"
+      },
+      {
+        "name": "Subject",
+        "value": "=?UTF-8?B?Q29sYWJvcmFjacOzbiBwYWdhZGE6IA==?=\r\n =?UTF-8?Q?caf=C3=A9_y_m=C3=A1s_=F0=9F=8E=AC?="
+      },
+      {
+        "name": "From",
+        "value": "=?UTF-8?Q?Jos=C3=A9_Garc=C3=ADa?= <jose@marca.example>"
+      },
+      {
+        "name": "To",
+        "value": "\"=?utf-8?B?Q3JlYWRvcg==?=\" <creator@example.com>"
+      },
+      {
+        "name": "Cc",
+        "value": "=?UTF-8?B?5bGx55Sw?= =?UTF-8?B?5aSq6YOO?= <yamada@brand.example>"
+      },
+      {
+        "name": "Content-Type",
+        "value": "text/plain; charset=UTF-8"
+      },
+      {
+        "name": "Content-Transfer-Encoding",
+        "value": "8bit"
+      }
+    ],
+    "body": {
+      "size": 41,
+      "data": "SG9sYSwgwr90ZSBpbnRlcmVzYSB1biBwYXRyb2NpbmlvPyDwn46sDQo"
+    }
+  },
+  "sizeEstimate": 1733,
+  "historyId": "4844120",
+  "internalDate": "1789935900000"
+}

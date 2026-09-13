@@ -1,0 +1,66 @@
+{
+  "id": "19205a0b1c2d3e44",
+  "threadId": "191e8a2f4c0b7d11",
+  "labelIds": [
+    "INBOX"
+  ],
+  "snippet": "Header casing test body.",
+  "payload": {
+    "partId": "",
+    "mimeType": "text/plain",
+    "filename": "",
+    "headers": [
+      {
+        "name": "mime-version",
+        "value": "1.0"
+      },
+      {
+        "name": "DATE",
+        "value": "Sat, 19 Sep 2026 10:00:00 +0000"
+      },
+      {
+        "name": "message-id",
+        "value": "<odd.casing.1@brand.example>"
+      },
+      {
+        "name": "in-reply-to",
+        "value": "<CAF7x9Q1meshwave0001@mail.gmail.com>"
+      },
+      {
+        "name": "REFERENCES",
+        "value": "<root.0@brand.example>\r\n <CAF7x9Q1meshwave0001@mail.gmail.com>\r\n\t<root.0@brand.example>"
+      },
+      {
+        "name": "subject",
+        "value": "Re: A subject that was\r\n folded across lines"
+      },
+      {
+        "name": "FROM",
+        "value": "Brand Team\r\n <team@brand.example>"
+      },
+      {
+        "name": "to",
+        "value": "creator@example.com"
+      },
+      {
+        "name": "CC",
+        "value": "ops@brand.example"
+      },
+      {
+        "name": "reply-TO",
+        "value": "<replies@brand.example>"
+      },
+      {
+        "name": "content-TYPE",
+        "value": "text/plain; CHARSET=utf-8"
+      }
+    ],
+    "body": {
+      "size": 26,
+      "data": "SGVhZGVyIGNhc2luZyB0ZXN0IGJvZHkuDQo"
+    }
+  },
+  "sizeEstimate": 640,
+  "historyId": "4843550",
+  "internalDate": "1789812000000"
+}

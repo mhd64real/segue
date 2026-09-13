@@ -1,0 +1,248 @@
+{
+  "id": "191f0c6a8e2d4b55",
+  "threadId": "191e9b7c1a3f5e22",
+  "labelIds": [
+    "IMPORTANT",
+    "CATEGORY_PERSONAL",
+    "INBOX"
+  ],
+  "snippet": "Hello again, Following up with our media kit attached. The offer of 900 USD for a 45 second mention still stands.",
+  "payload": {
+    "partId": "",
+    "mimeType": "multipart/mixed",
+    "filename": "",
+    "headers": [
+      {
+        "name": "Delivered-To",
+        "value": "creator@example.com"
+      },
+      {
+        "name": "Received",
+        "value": "by 2002:a05:6a10:8e0b:b0:5c4:1f2a:9d31 with SMTP id z11csp412345pxb; Tue, 15 Sep 2026 16:40:02 +0000"
+      },
+      {
+        "name": "X-Google-Smtp-Source",
+        "value": "AGHT+IFq3v1c9T0x0exampleexampleexample"
+      },
+      {
+        "name": "X-Received",
+        "value": "by 2002:a17:907:3e8c:b0:a7d:4f1e:2b0 with SMTP id hs12mr5566771ejc.33; Tue, 15 Sep 2026 16:40:02 +0000"
+      },
+      {
+        "name": "ARC-Seal",
+        "value": "i=1; a=rsa-sha256; t=1789372800; cv=none; d=google.com; s=arc-20240605; b=Zm9vYmFyZXhhbXBsZQ=="
+      },
+      {
+        "name": "Return-Path",
+        "value": "<bounces@mail.brand.example>"
+      },
+      {
+        "name": "Received-SPF",
+        "value": "pass (google.com: domain of bounces@mail.brand.example designates 192.0.2.10 as permitted sender) client-ip=192.0.2.10;"
+      },
+      {
+        "name": "Authentication-Results",
+        "value": "mx.google.com; dkim=pass header.i=@brand.example; spf=pass smtp.mailfrom=bounces@mail.brand.example; dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=brand.example"
+      },
+      {
+        "name": "DKIM-Signature",
+        "value": "v=1; a=rsa-sha256; c=relaxed/relaxed; d=brand.example; s=s1; h=from:to:subject:date:message-id; bh=ZXhhbXBsZQ==; b=ZXhhbXBsZXNpZ25hdHVyZQ=="
+      },
+      {
+        "name": "MIME-Version",
+        "value": "1.0"
+      },
+      {
+        "name": "References",
+        "value": "<keystone-outreach-1@mail.keystonevpn.example> <CAF7x9Q1reply0002@mail.gmail.com>"
+      },
+      {
+        "name": "In-Reply-To",
+        "value": "<CAF7x9Q1reply0002@mail.gmail.com>"
+      },
+      {
+        "name": "Date",
+        "value": "Tue, 15 Sep 2026 16:40:02 +0000"
+      },
+      {
+        "name": "Message-ID",
+        "value": "<keystone-followup-2@mail.keystonevpn.example>"
+      },
+      {
+        "name": "Subject",
+        "value": "Re: Sponsorship for your home network videos"
+      },
+      {
+        "name": "From",
+        "value": "Marco Ellis <marco@keystonevpn.example>"
+      },
+      {
+        "name": "To",
+        "value": "Creator <creator@example.com>"
+      },
+      {
+        "name": "Cc",
+        "value": "Scheduling <scheduling@brightreach.example>"
+      },
+      {
+        "name": "Reply-To",
+        "value": "Keystone Creators <creators@keystonevpn.example>"
+      },
+      {
+        "name": "Content-Type",
+        "value": "multipart/mixed; boundary=\"00000000000011223344556677\""
+      }
+    ],
+    "body": {
+      "size": 0
+    },
+    "parts": [
+      {
+        "partId": "0",
+        "mimeType": "multipart/alternative",
+        "filename": "",
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "multipart/alternative; boundary=\"000000000000aabbccddeeff00\""
+          }
+        ],
+        "body": {
+          "size": 0
+        },
+        "parts": [
+          {
+            "partId": "0.0",
+            "mimeType": "text/plain",
+            "filename": "",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": "text/plain; charset=\"UTF-8\""
+              },
+              {
+                "name": "Content-Transfer-Encoding",
+                "value": "quoted-printable"
+              }
+            ],
+            "body": {
+              "size": 136,
+              "data": "SGVsbG8gYWdhaW4sDQoNCkZvbGxvd2luZyB1cCB3aXRoIG91ciBtZWRpYSBraXQgYXR0YWNoZWQuIFRoZSBvZmZlciBvZiA5MDAgVVNEIGZvciBhIDQ1IHNlY29uZCBtZW50aW9uIHN0aWxsIHN0YW5kcy4NCg0KVGhhbmtzLA0KTWFyY28NCg"
+            }
+          },
+          {
+            "partId": "0.1",
+            "mimeType": "multipart/related",
+            "filename": "",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "value": "multipart/related; boundary=\"000000000000ffeeddccbbaa99\""
+              }
+            ],
+            "body": {
+              "size": 0
+            },
+            "parts": [
+              {
+                "partId": "0.1.0",
+                "mimeType": "text/html",
+                "filename": "",
+                "headers": [
+                  {
+                    "name": "Content-Type",
+                    "value": "text/html; charset=\"UTF-8\""
+                  },
+                  {
+                    "name": "Content-Transfer-Encoding",
+                    "value": "quoted-printable"
+                  }
+                ],
+                "body": {
+                  "size": 113,
+                  "data": "PGh0bWw-PGJvZHk-PHA-SGVsbG8gYWdhaW4sPC9wPjxwPkZvbGxvd2luZyB1cCB3aXRoIG91ciBtZWRpYSBraXQuPC9wPjxpbWcgc3JjPSJjaWQ6bG9nb0BrZXlzdG9uZSI-PC9ib2R5PjwvaHRtbD4"
+                }
+              },
+              {
+                "partId": "0.1.1",
+                "mimeType": "image/png",
+                "filename": "logo.png",
+                "headers": [
+                  {
+                    "name": "Content-Type",
+                    "value": "image/png; name=\"logo.png\""
+                  },
+                  {
+                    "name": "Content-Disposition",
+                    "value": "inline; filename=\"logo.png\""
+                  },
+                  {
+                    "name": "Content-Transfer-Encoding",
+                    "value": "base64"
+                  },
+                  {
+                    "name": "Content-ID",
+                    "value": "<logo@keystone>"
+                  }
+                ],
+                "body": {
+                  "size": 33,
+                  "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJ"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "partId": "1",
+        "mimeType": "application/pdf",
+        "filename": "Keystone media kit.pdf",
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "application/pdf; name=\"Keystone media kit.pdf\""
+          },
+          {
+            "name": "Content-Disposition",
+            "value": "attachment; filename=\"Keystone media kit.pdf\""
+          },
+          {
+            "name": "Content-Transfer-Encoding",
+            "value": "base64"
+          },
+          {
+            "name": "X-Attachment-Id",
+            "value": "f_m1a2b3c40"
+          }
+        ],
+        "body": {
+          "attachmentId": "ANGjdJ9exampleAttachmentIdOnly",
+          "size": 248133
+        }
+      },
+      {
+        "partId": "2",
+        "mimeType": "text/plain",
+        "filename": "terms.txt",
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "text/plain; charset=\"UTF-8\"; name=\"terms.txt\""
+          },
+          {
+            "name": "Content-Disposition",
+            "value": "attachment; filename=\"terms.txt\""
+          }
+        ],
+        "body": {
+          "size": 36,
+          "data": "VGhlc2UgdGVybXMgbXVzdCBub3QgcmVhY2ggdGhlIGJvZHku"
+        }
+      }
+    ]
+  },
+  "sizeEstimate": 339120,
+  "historyId": "4840077",
+  "internalDate": "1789490402000"
+}

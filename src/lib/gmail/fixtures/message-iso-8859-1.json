@@ -1,0 +1,54 @@
+{
+  "id": "19204f1d2e3c4b33",
+  "threadId": "19204f1d2e3c4b33",
+  "labelIds": [
+    "INBOX"
+  ],
+  "snippet": "Grüße aus München! Wir bieten 500 £ für ein Segment über Crème brûlée.",
+  "payload": {
+    "partId": "",
+    "mimeType": "text/plain",
+    "filename": "",
+    "headers": [
+      {
+        "name": "MIME-Version",
+        "value": "1.0"
+      },
+      {
+        "name": "Date",
+        "value": "Fri, 18 Sep 2026 07:15:00 +0200"
+      },
+      {
+        "name": "Message-ID",
+        "value": "<5f2e1d0c.latin1@kueche.example>"
+      },
+      {
+        "name": "Subject",
+        "value": "=?ISO-8859-1?Q?Gr=FC=DFe_aus_M=FCnchen?="
+      },
+      {
+        "name": "From",
+        "value": "=?iso-8859-1?q?J=FCrgen_M=FCller?= <juergen@kueche.example>"
+      },
+      {
+        "name": "To",
+        "value": "creator@example.com"
+      },
+      {
+        "name": "Content-Type",
+        "value": "text/plain; charset=\"ISO-8859-1\"; format=flowed"
+      },
+      {
+        "name": "Content-Transfer-Encoding",
+        "value": "8bit"
+      }
+    ],
+    "body": {
+      "size": 75,
+      "data": "R3L832UgYXVzIE38bmNoZW4hDQoNCldpciBiaWV0ZW4gNTAwIKMgZvxyIGVpbiBTZWdtZW50IPxiZXIgQ3LobWUgYnL7bOllLg0K"
+    }
+  },
+  "sizeEstimate": 902,
+  "historyId": "4843001",
+  "internalDate": "1789708500000"
+}

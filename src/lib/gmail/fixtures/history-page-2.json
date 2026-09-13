@@ -1,0 +1,49 @@
+{
+  "history": [
+    {
+      "id": "4839420",
+      "messages": [
+        {
+          "id": "191ef00a11b2c3d4",
+          "threadId": "191e9b7c1a3f5e22"
+        }
+      ]
+    },
+    {
+      "id": "4840001",
+      "messages": [
+        {
+          "id": "191e8a2f4c0b7d11",
+          "threadId": "191e8a2f4c0b7d11"
+        },
+        {
+          "id": "191f0c6a8e2d4b55",
+          "threadId": "191e9b7c1a3f5e22"
+        }
+      ],
+      "messagesAdded": [
+        {
+          "message": {
+            "id": "191e8a2f4c0b7d11",
+            "threadId": "191e8a2f4c0b7d11",
+            "labelIds": [
+              "INBOX"
+            ]
+          }
+        },
+        {
+          "message": {
+            "id": "191f0c6a8e2d4b55",
+            "threadId": "191e9b7c1a3f5e22",
+            "labelIds": [
+              "IMPORTANT",
+              "INBOX"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "nextPageToken": "12345678901234567890",
+  "historyId": "4840100"
+}
