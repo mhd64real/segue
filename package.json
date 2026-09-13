@@ -7,26 +7,37 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "0.125.0",
     "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@googleapis/gmail": "21.0.0",
     "@mui/icons-material": "^9.4.0",
     "@mui/material": "^9.4.0",
     "@mui/material-nextjs": "^9.4.0",
+    "@supabase/ssr": "0.12.7",
+    "@supabase/supabase-js": "2.116.0",
+    "diff": "9.0.0",
+    "google-auth-library": "11.0.2",
     "next": "16.3.5",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "server-only": "0.0.1",
+    "zod": "4.6.4"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^24.13.4",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "5.0.0"
   },
   "packageManager": "pnpm@9.15.9"
 }
